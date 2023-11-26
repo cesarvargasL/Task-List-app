@@ -1,13 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getAlltasks } from "../api/tasks.api";
+import { TaskCard } from "./TaskCard";
 
 export function TasksList(){
 
+    const [tasks, setTasks] = useState([]);
     useEffect(() => {
-        console.log("page loaded")
+        async function loadTasks(){
+            const res = await getAlltasks();
+            setTasks(res.data);
+        }
+        loadTasks();
     }, [])
     return (
-        <div>
-            <h1>Tasks List</h1>
+        <div className="grid grid-cols-3 gap-3">
+            {tasks.map(task => (
+                <TaskCard key={task.id} task={task} />
+            ))
+            }
         </div>
     )
 }
